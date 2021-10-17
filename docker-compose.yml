@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  coffee-backend:
+    image: coffee-api:latest
+    build:
+      context: coffee_backend
+      dockerfile: backend.dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - coffee-db:/mnt/db
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 40001:3000
+    environment:
+      - GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource,grafana-clock-panel,grafana-simple-json-datasource
+      - GF_PANELS_DISABLE_SANITIZE_HTML=true
+
+  coffee-frontend:
+    image: coffee-form:latest
+    build:
+      context: coffee_frontend
+      dockerfile: frontend.dockerfile
+    ports:
+      - 40000:3000
+
+volumes:
+  coffee-db:
